@@ -1,0 +1,19 @@
+meta {
+  name: Insert User
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8080/users
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "Name": "Endo",
+    "Age": 27,
+    "Gender": "male"
+  }
+}
