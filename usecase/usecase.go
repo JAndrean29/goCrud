@@ -42,11 +42,27 @@ func UpdateUserUsecase(user *model.User) (*model.User, error) {
 	row, err := result.RowsAffected()
 	if err != nil {
 		return nil, fmt.Errorf("failed update 2: %w", err)
-	} else if row == 0 {
+	}
+
+	if row == 0 {
 		return nil, fmt.Errorf("selected user ID does not exists: %d", user.ID)
 	}
 
 	return user, nil
 }
 
-func DeleteUserUsecase()
+func DeleteUserUsecase(id int64) error {
+	result, err := db.Exec(`delete from user where id=?`)
+	if err != nil {
+		return fmt.Errorf("failed delete 1: %w", err)
+	}
+
+	row, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("failed delete 2: %w", err)
+	}
+
+	if row == 0 {
+		return fmt.Errorf("selected ID does note exists: %d", id)
+	}
+}
