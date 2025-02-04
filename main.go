@@ -1,7 +1,7 @@
 package main
 
 import (
-	"goCrud/infrastructure/sqlitedb"
+	"goCrud/handler"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3"
@@ -9,9 +9,8 @@ import (
 
 func main() {
 	r := gin.Default()
-	sqlitedb.InitiateSqliteConnection()
 
-	r.POST("/users/create", CreateUserHandler)
+	r.POST("/users/create", handler.CreateUserHandler)
 
 	r.Run()
 }
