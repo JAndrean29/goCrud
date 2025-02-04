@@ -52,7 +52,7 @@ func UpdateUserUsecase(user *model.User) (*model.User, error) {
 }
 
 func DeleteUserUsecase(id int64) error {
-	result, err := db.Exec(`delete from user where id=?`)
+	result, err := db.Exec(`delete from user where id=?`, id)
 	if err != nil {
 		return fmt.Errorf("failed delete 1: %w", err)
 	}
