@@ -43,7 +43,7 @@ func UpdateUserUsecase(user *model.User) (*model.User, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed update 2: %w", err)
 	} else if row == 0 {
-		return nil, fmt.Errorf("selected user ID does not exists: %w", err)
+		return nil, fmt.Errorf("selected user ID does not exists: %d", user.ID)
 	}
 
 	return user, nil
