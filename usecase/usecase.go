@@ -11,12 +11,12 @@ func CreateUserUsecase(user *model.User) (*model.User, error) {
 	query := `insert into user (name,age,gender) values (?,?,?)`
 	result, err := db.Exec(query, user.Name, user.Age, user.Gender)
 	if err != nil {
-		return nil, fmt.Errorf("failed:", err)
+		return nil, fmt.Errorf("failed: %w", err)
 	}
 
 	id, err := result.LastInsertId()
 	if err != nil {
-		return nil, fmt.Errorf("failed 2:", err)
+		return nil, fmt.Errorf("failed 2: %w", err)
 	}
 
 	user.ID = id
