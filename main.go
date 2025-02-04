@@ -10,6 +10,7 @@ import (
 func main() {
 	r := gin.Default()
 
+	r.GET("/users", handler.GetUserHandler)
 	r.POST("/users/create", handler.CreateUserHandler)
 
 	r.Run()

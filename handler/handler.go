@@ -3,7 +3,6 @@ package handler
 import (
 	"goCrud/model"
 	"goCrud/usecase"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,7 +14,6 @@ func CreateUserHandler(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	log.Println(req)
 
 	createdUser, err := usecase.CreateUserUsecase(&req)
 	if err != nil {
@@ -24,4 +22,8 @@ func CreateUserHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, gin.H{"message": createdUser})
+}
+
+func GetUserHandler(c *gin.Context) {
+
 }
