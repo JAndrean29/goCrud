@@ -6,10 +6,10 @@ import (
 	"goCrud/model"
 )
 
+var db = sqlitedb.InitiateSqliteConnection()
+
 func CreateUserUsecase(user *model.User) (*model.User, error) {
-	db := sqlitedb.InitiateSqliteConnection()
-	query := `insert into user (name,age,gender) values (?,?,?)`
-	result, err := db.Exec(query, user.Name, user.Age, user.Gender)
+	result, err := db.Exec(`insert into user (name,age,gender) values (?,?,?)`, user.Name, user.Age, user.Gender)
 	if err != nil {
 		return nil, fmt.Errorf("failed: %w", err)
 	}
@@ -23,13 +23,12 @@ func CreateUserUsecase(user *model.User) (*model.User, error) {
 	return user, nil
 }
 
-func ShowAll() ([]*model.User, error) {
-	var users []*model.User
-	query := `select * from user`
-	err := sqlitedb.InitiateSqliteConnection().Select(&users, query)
+func ShowAll() (*[]model.User, error) {
+	var users []model.User
+	err := db.Select(&users, `select * from user`)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch users data: %w", err)
 	}
 
-	return users, nil
+	return &users, nil
 }
