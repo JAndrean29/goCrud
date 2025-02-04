@@ -22,3 +22,14 @@ func CreateUserUsecase(user *model.User) (*model.User, error) {
 	user.ID = id
 	return user, nil
 }
+
+func ShowAll() ([]model.User, error) {
+	var users []model.User
+	query := `select * from user`
+	err := sqlitedb.InitiateSqliteConnection().Select(&users, query)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch users data: %w", err)
+	}
+
+	return users, nil
+}
