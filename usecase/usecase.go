@@ -48,3 +48,5 @@ func UpdateUserUsecase(user *model.User) (*model.User, error) {
 
 	return user, nil
 }
+
+func DeleteUserUsecase()

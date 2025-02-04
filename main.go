@@ -12,6 +12,7 @@ func main() {
 
 	r.GET("/users", handler.GetUserHandler)
 	r.POST("/users/create", handler.CreateUserHandler)
+	r.POST("/users/edit", handler.UpdateUserHandler)
 
 	r.Run()
 }
