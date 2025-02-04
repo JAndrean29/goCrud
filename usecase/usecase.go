@@ -65,4 +65,6 @@ func DeleteUserUsecase(id int64) error {
 	if row == 0 {
 		return fmt.Errorf("selected ID does note exists: %d", id)
 	}
+
+	return nil
 }

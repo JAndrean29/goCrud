@@ -48,3 +48,18 @@ func UpdateUserHandler(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": affectedUser})
 }
+
+func DeleteUserHandler(c *gin.Context) {
+	if err := c.ShouldBindJSON(req.ID); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := usecase.DeleteUserUsecase(req.ID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "user delete success!"})
+}
