@@ -4,6 +4,7 @@ import (
 	"goCrud/model"
 	"goCrud/usecase"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -50,12 +51,13 @@ func UpdateUserHandler(c *gin.Context) {
 }
 
 func DeleteUserHandler(c *gin.Context) {
-	if err := c.ShouldBindJSON(req.ID); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
+	idParam := c.Param("id")
+	id, err := strconv.ParseInt(idParam, 10, 64)
+	if err != nil {
+		panic(err)
 	}
 
-	err := usecase.DeleteUserUsecase(req.ID)
+	err = usecase.DeleteUserUsecase(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
