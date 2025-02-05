@@ -1,3 +1,4 @@
+// This is the restaurant, where the server and chef works in, this is where the waiter knows what meal is to be given and tells the chef what the waiter wants
 package handler
 
 import (

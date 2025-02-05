@@ -24,7 +24,7 @@ func NewCrudUseCase(crudRepo repository.CrudRepository) CrudUsecase {
 
 // CreateUserUsecase implements CrudUsecase.
 func (c *crudUsecase) CreateUser(user *model.User) (*model.User, error) {
-	if user.Name == "" || user.Age <= 0 || (strings.ToLower(user.Gender) != "male" || strings.ToLower(user.Gender) != "female") {
+	if user.Name == "" || user.Age <= 0 || (strings.ToLower(user.Gender) != "male" && strings.ToLower(user.Gender) != "female") {
 		return nil, errors.New("invalid input detected")
 	}
 
@@ -47,7 +47,7 @@ func (c *crudUsecase) GetAll() (*[]model.User, error) {
 
 // UpdateUserUsecase implements CrudUsecase.
 func (c *crudUsecase) UpdateUser(user *model.User) (*model.User, error) {
-	if user.Name == "" || user.Age <= 0 || (strings.ToLower(user.Gender) != "male" || strings.ToLower(user.Gender) != "female") {
+	if user.Name == "" || user.Age <= 0 || (strings.ToLower(user.Gender) != "male" && strings.ToLower(user.Gender) != "female") {
 		return nil, errors.New("invalid input detected")
 	}
 

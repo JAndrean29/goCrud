@@ -1,3 +1,4 @@
+// This is the customer, asking for a ready to eat meal
 package main
 
 import (
@@ -25,7 +26,7 @@ func main() {
 	r.GET("/users", crudHandler.GetAll)
 	r.POST("/users/create", crudHandler.CreateUser)
 	r.POST("/users/edit", crudHandler.UpdateUser)
-	r.DELETE("/usres/delete/:id", crudHandler.DeleteUser)
+	r.DELETE("/users/delete/:id", crudHandler.DeleteUser)
 
 	//RUN GIN SERVER
 	r.Run()

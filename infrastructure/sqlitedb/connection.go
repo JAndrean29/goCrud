@@ -1,3 +1,4 @@
+// This is the database related code
 package sqlitedb
 
 import (

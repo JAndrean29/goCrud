@@ -1,3 +1,4 @@
+// This is the server or waitress, they know the menu, and know what to serve, without needing to know the how and what is used
 package di
 
 import (
