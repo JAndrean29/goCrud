@@ -15,8 +15,8 @@ type CrudHandler struct {
 	crudUsecase usecase.CrudUsecase
 }
 
-func NewCrudHandler(crudUsecase usecase.CrudUsecase) *CrudHandler {
-	return &CrudHandler{crudUsecase: crudUsecase}
+func NewCrudHandler(crudUsecase usecase.CrudUsecase) CrudHandler {
+	return CrudHandler{crudUsecase: crudUsecase}
 }
 
 func (h *CrudHandler) GetAll(c *gin.Context) {

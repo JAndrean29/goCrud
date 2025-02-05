@@ -19,7 +19,7 @@ type crudRepository struct {
 	db *sqlx.DB
 }
 
-func newCrudRepository(db *sqlx.DB) CrudRepository {
+func NewCrudRepository(db *sqlx.DB) CrudRepository {
 	return &crudRepository{db: db}
 }
 

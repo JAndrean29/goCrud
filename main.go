@@ -1,19 +1,32 @@
 package main
 
 import (
-	"goCrud/handler"
+	"goCrud/di"
+	"goCrud/infrastructure/sqlitedb"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
+	//init DB
+	db := sqlitedb.InitiateSqliteConnection()
+
+	//Build the service
+	crudService := di.BuildCrudService(db)
+
+	//set the Handler
+	crudHandler := crudService.CrudHandler
+
+	//declare GIN for routing
 	r := gin.Default()
 
-	r.GET("/users", handler.GetUserHandler)
-	r.POST("/users/create", handler.CreateUserHandler)
-	r.POST("/users/edit", handler.UpdateUserHandler)
-	r.DELETE("/users/delete/:id", handler.DeleteUserHandler)
+	//routes
+	r.GET("/users", crudHandler.GetAll)
+	r.POST("/users/create", crudHandler.CreateUser)
+	r.POST("/users/edit", crudHandler.UpdateUser)
+	r.DELETE("/usres/delete/:id", crudHandler.DeleteUser)
 
+	//RUN GIN SERVER
 	r.Run()
 }
