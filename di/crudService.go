@@ -13,11 +13,11 @@ type CrudService struct {
 	DB             *sqlx.DB
 	CrudHandler    handler.CrudHandler
 	CrudUsecase    usecase.CrudUsecase
-	CrudRepository repository.CrudRepository
+	CrudRepository repository.Queries
 }
 
 func BuildCrudService(db *sqlx.DB) *CrudService {
-	repo := repository.NewCrudRepository(db)
+	repo := repository.New(db)
 
 	crudUsecase := usecase.NewCrudUseCase(repo)
 

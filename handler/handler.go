@@ -2,7 +2,7 @@
 package handler
 
 import (
-	"goCrud/model"
+	"goCrud/repository"
 	"goCrud/usecase"
 	"net/http"
 	"strconv"
@@ -10,7 +10,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var req model.User
+var createReq repository.CreateUserParams
+var updateReq repository.UpdateUserParams
 
 type CrudHandler struct {
 	crudUsecase usecase.CrudUsecase
@@ -21,7 +22,7 @@ func NewCrudHandler(crudUsecase usecase.CrudUsecase) CrudHandler {
 }
 
 func (h *CrudHandler) GetAll(c *gin.Context) {
-	users, err := h.crudUsecase.GetAll()
+	users, err := h.crudUsecase.GetAll(c)
 	if err != nil {
 		c.JSON(http.StatusGatewayTimeout, gin.H{"error": err.Error()})
 		return
@@ -30,13 +31,13 @@ func (h *CrudHandler) GetAll(c *gin.Context) {
 }
 
 func (h *CrudHandler) CreateUser(c *gin.Context) {
-	err := c.ShouldBindJSON(&req)
+	err := c.ShouldBindJSON(createReq)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	user, err := h.crudUsecase.CreateUser(&req)
+	user, err := h.crudUsecase.CreateUser(c, createReq)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -46,13 +47,13 @@ func (h *CrudHandler) CreateUser(c *gin.Context) {
 }
 
 func (h *CrudHandler) UpdateUser(c *gin.Context) {
-	err := c.ShouldBindJSON(&req)
+	err := c.ShouldBindJSON(updateReq)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	user, err := h.crudUsecase.UpdateUser(&req)
+	user, err := h.crudUsecase.UpdateUser(c, updateReq)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -68,7 +69,7 @@ func (h *CrudHandler) DeleteUser(c *gin.Context) {
 		panic(err)
 	}
 
-	err = h.crudUsecase.DeleteUser(id)
+	err = h.crudUsecase.DeleteUser(c, id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
