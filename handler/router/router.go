@@ -9,7 +9,7 @@ import (
 func Setup(service *di.CrudService) *gin.Engine {
 	r := gin.Default()
 
-	//Register Database connection (will be asked promptly)
+	//Register Database connection, this is used for healthcheck endpoint to see if all necessary dependencies and DB is connected
 	r.Use(func(c *gin.Context) {
 		c.Set("db", service.DB)
 		c.Next()

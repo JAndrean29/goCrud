@@ -24,3 +24,9 @@ func startServer(service *di.CrudService) {
 
 	r.Run()
 }
+
+/*
+useful commands:
+docker run --rm -v $(pwd):/src -w /src sqlc/sqlc generate
+go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+*/
