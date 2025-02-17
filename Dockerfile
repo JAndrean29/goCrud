@@ -1,19 +1,62 @@
 #New Scripts attempting for a multi-stage Building
-#No using build label as I don't buil anything
-FROM golang:alpine3.21
+#Building Stage
+#Running go build since I run from Windows machine
+FROM golang:alpine3.21 AS build
 
-RUN apk --no-cache add tzdata
+#requires to add libc-dev to use gcc to able to compile the program with CGO_ENABLED=1
+RUN apk --no-cache add tzdata gcc libc-dev
 
 ENV TZ=asia/jakarta
 
 COPY go.mod go.sum ./
 RUN go mod download
 
-COPY di handler/ infrastructure/ model/ repository/ usecase/ users.db main.go ./
+#copy api_docs
+COPY api_docs ./api_docs
+
+#copy di
+COPY di ./di
+
+#copy handler
+COPY handler ./handler
+
+#copy infrastructure
+COPY infrastructure ./infrastructure
+
+#copy mode
+COPY model ./model
+
+#copy repository
+COPY repository ./repository
+
+#copy usecase
+COPY usecase ./usecase
+
+#copy main.go
+COPY main.go .
+
+ENV CGO_ENABLED=1
 
 RUN go build -o /bin/main main.go
 
 RUN ls -la
+
+#Running Stage
+FROM alpine AS running
+
+WORKDIR /app
+
+RUN apk --no-cache add sqlite
+
+COPY users.db .
+COPY --from=build bin .
+COPY --from=build usr/share/zoneinfo .
+
+RUN ls -la
+
+ENTRYPOINT [ "./main", "-p", "8080" ]
+
+EXPOSE 8080
 
 #use FROM golang because just running golang
 #FROM golang:latest
