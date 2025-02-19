@@ -10,7 +10,7 @@ type Cfg struct {
 
 type DbConfig struct {
 	Host     string
-	Port     uint16
+	Port     string
 	Database string
 	User     string
 	Password string
