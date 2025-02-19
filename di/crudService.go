@@ -2,30 +2,32 @@
 package di
 
 import (
+	"goCrud/config"
 	"goCrud/handler"
 	"goCrud/repository"
 	"goCrud/usecase"
 
-	"github.com/jmoiron/sqlx"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type CrudService struct {
-	DB             *sqlx.DB
+	Cfg            *config.Cfg
+	DB             *pgxpool.Pool
 	CrudHandler    handler.CrudHandler
 	CrudUsecase    usecase.CrudUsecase
 	CrudRepository repository.Queries
 }
 
-func BuildCrudService(db *sqlx.DB) *CrudService {
+func BuildCrudService(c *config.Cfg, db *pgxpool.Pool) *CrudService {
 	repo := repository.New(db)
 
-	crudUsecase := usecase.NewCrudUseCase(repo)
+	crudUsecase := usecase.NewCrudUseCase(c, repo)
 
 	crudHandler := handler.NewCrudHandler(crudUsecase)
 
 	return &CrudService{
 		DB:             db,
-		CrudRepository: repo,
+		CrudRepository: *repo,
 		CrudUsecase:    crudUsecase,
 		CrudHandler:    crudHandler,
 	}

@@ -1,14 +1,28 @@
 package config
 
-import (
-	"time"
-)
+import env "github.com/caarlos0/env/v11"
 
-type DatabaseConfig struct {
-	Host           string // host (e.g. localhost) or absolute path to unix domain socket directory (e.g. /private/tmp)
-	Port           uint16
-	Database       string
-	User           string
-	Password       string
-	ConnectTimeout time.Duration
+type Cfg struct {
+	Port        string
+	Database    DbConfig
+	ServiceName string
+}
+
+type DbConfig struct {
+	Host     string
+	Port     uint16
+	Database string
+	User     string
+	Password string
+	SSLMODE  string
+}
+
+func LoadConfig() (*Cfg, error) {
+	cfg := &Cfg{}
+
+	if err := env.Parse(cfg); err != nil {
+		return &Cfg{}, err
+	}
+
+	return cfg, nil
 }

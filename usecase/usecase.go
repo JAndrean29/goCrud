@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"errors"
+	"goCrud/config"
 	"goCrud/repository"
 	"strings"
 )
@@ -15,7 +16,8 @@ type CrudUsecase interface {
 }
 
 type crudUsecase struct {
-	crudRepo repository.Queries
+	config   *config.Cfg
+	crudRepo *repository.Queries
 }
 
 // CreateUser implements CrudUsecase.
@@ -50,8 +52,11 @@ func (c crudUsecase) UpdateUser(ctx context.Context, user repository.UpdateUserP
 	return c.crudRepo.UpdateUser(ctx, user)
 }
 
-func NewCrudUseCase(crudRepo repository.Queries) CrudUsecase {
-	return crudUsecase{crudRepo: crudRepo}
+func NewCrudUseCase(config *config.Cfg, crudRepo *repository.Queries) CrudUsecase {
+	return &crudUsecase{
+		config:   config,
+		crudRepo: crudRepo,
+	}
 }
 
 /* OLD colde before integration
