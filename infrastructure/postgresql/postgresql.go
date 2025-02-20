@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"goCrud/config"
-	"log"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -14,15 +13,17 @@ func New(cfg *config.Cfg) (*pgx.Conn, error) {
 	dsn := constructUrl(&cfg.Database)
 
 	db, err := pgx.Connect(context.Background(), dsn)
+	fmt.Println("connecting to: ", dsn)
 	if err != nil {
-		log.Fatalf("connection failed, error: %v", err)
+		return nil, fmt.Errorf("connection error: %w", err)
 	}
-
 	return db, nil
+
+	//currently unused
 }
 
 func NewPool(cfg *config.Cfg) (*pgxpool.Pool, error) {
-	pgConfig, err := pgxpool.ParseConfig(fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s", cfg.Database.Host, cfg.Database.Port, cfg.Database.Database, cfg.Database.User, cfg.Database.Password, cfg.Database.SSLMODE))
+	pgConfig, err := pgxpool.ParseConfig(fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s", cfg.Database.User, cfg.Database.Password, cfg.Database.Host, cfg.Database.Port, cfg.Database.Database, cfg.Database.SSLMODE))
 	if err != nil {
 		return nil, err
 	}

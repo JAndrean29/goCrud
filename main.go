@@ -7,6 +7,7 @@ import (
 	"goCrud/di"
 	"goCrud/handler/router"
 	"goCrud/infrastructure/postgresql"
+	"log"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -17,14 +18,19 @@ func main() {
 	if err != nil {
 		fmt.Printf("error loading config: %v", err)
 	}
-	fmt.Println()
-	fmt.Printf("loaded the following config: %v", cfg)
+	fmt.Printf("loaded the following config: %s\n", cfg.Database)
+
+	if cfg.Database.User == " " || cfg.Database.Database == " " {
+		log.Fatalf("missing config: %+v\n", cfg.Database)
+	}
 
 	//init DB
 	db, err := postgresql.NewPool(cfg)
 	if err != nil {
-		fmt.Printf("error loading db: %v", err)
+		log.Fatalf("error loading db: %v", err)
 	}
+
+	log.Println("successfully connected to postgresql db!")
 
 	//Build the service
 	crudService := di.BuildCrudService(cfg, db)

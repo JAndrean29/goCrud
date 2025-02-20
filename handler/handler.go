@@ -31,7 +31,7 @@ func (h *CrudHandler) GetAll(c *gin.Context) {
 }
 
 func (h *CrudHandler) CreateUser(c *gin.Context) {
-	err := c.ShouldBindJSON(createReq)
+	err := c.ShouldBindJSON(&createReq)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -47,7 +47,7 @@ func (h *CrudHandler) CreateUser(c *gin.Context) {
 }
 
 func (h *CrudHandler) UpdateUser(c *gin.Context) {
-	err := c.ShouldBindJSON(updateReq)
+	err := c.ShouldBindJSON(&updateReq)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

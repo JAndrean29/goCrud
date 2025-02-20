@@ -1,5 +1,2 @@
 .editorconfig
 compose.yaml
-.dockerignore
-docker-compose.yaml
-.env
