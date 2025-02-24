@@ -23,6 +23,7 @@ services:
       - 5432:5432
     volumes:
       - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql #initiate schema.sql, in this case create users table
+      - pg_data:/var/lib/postgresql/data
 
 
   app:
@@ -74,3 +75,6 @@ services:
 # secrets:
 #   db-password:
 #     file: db/password.txt
+
+volumes:
+  pg_data:
