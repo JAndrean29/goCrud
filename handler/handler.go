@@ -1,3 +1,4 @@
+// This is the restaurant, where the server and chef works in, this is where the waiter knows what meal is to be given and tells the chef what the waiter wants
 package handler
 
 import (
@@ -11,53 +12,63 @@ import (
 
 var req model.User
 
-func CreateUserHandler(c *gin.Context) {
-	if err := c.ShouldBindJSON(&req); err != nil {
+type CrudHandler struct {
+	crudUsecase usecase.CrudUsecase
+}
+
+func NewCrudHandler(crudUsecase usecase.CrudUsecase) CrudHandler {
+	return CrudHandler{crudUsecase: crudUsecase}
+}
+
+func (h *CrudHandler) GetAll(c *gin.Context) {
+	users, err := h.crudUsecase.GetAll()
+	if err != nil {
+		c.JSON(http.StatusGatewayTimeout, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, users)
+}
+
+func (h *CrudHandler) CreateUser(c *gin.Context) {
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	user, err := h.crudUsecase.CreateUser(&req)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	createdUser, err := usecase.CreateUserUsecase(&req)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusCreated, gin.H{"message": createdUser})
+	c.JSON(http.StatusOK, gin.H{"message": user})
 }
 
-func GetUserHandler(c *gin.Context) {
-	users, err := usecase.GetAllUseCase()
+func (h *CrudHandler) UpdateUser(c *gin.Context) {
+	err := c.ShouldBindJSON(&req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, users)
-}
-
-func UpdateUserHandler(c *gin.Context) {
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-	}
-
-	affectedUser, err := usecase.UpdateUserUsecase(&req)
+	user, err := h.crudUsecase.UpdateUser(&req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": affectedUser})
+	c.JSON(http.StatusOK, gin.H{"message": user})
 }
 
-func DeleteUserHandler(c *gin.Context) {
+func (h *CrudHandler) DeleteUser(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.ParseInt(idParam, 10, 64)
 	if err != nil {
 		panic(err)
 	}
 
-	err = usecase.DeleteUserUsecase(id)
+	err = h.crudUsecase.DeleteUser(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

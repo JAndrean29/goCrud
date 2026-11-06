@@ -1,19 +1,26 @@
+// This is the customer, asking for a ready to eat meal
 package main
 
 import (
-	"goCrud/handler"
+	"goCrud/di"
+	"goCrud/handler/router"
+	"goCrud/infrastructure/sqlitedb"
 
-	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
-	r := gin.Default()
+	//init DB
+	db := sqlitedb.InitiateSqliteConnection()
 
-	r.GET("/users", handler.GetUserHandler)
-	r.POST("/users/create", handler.CreateUserHandler)
-	r.POST("/users/edit", handler.UpdateUserHandler)
-	r.DELETE("/users/delete/:id", handler.DeleteUserHandler)
+	//Build the service
+	crudService := di.BuildCrudService(db)
+
+	startServer(crudService)
+}
+
+func startServer(service *di.CrudService) {
+	r := router.Setup(service)
 
 	r.Run()
 }
