@@ -11,8 +11,8 @@ ENV TZ=asia/jakarta
 COPY go.mod go.sum ./
 RUN go mod download
 
-#copy config
-COPY config ./config
+#copy api_docs
+COPY api_docs ./api_docs
 
 #copy di
 COPY di ./di
@@ -48,10 +48,9 @@ WORKDIR /app
 
 RUN apk --no-cache add sqlite
 
+COPY users.db .
 COPY --from=build bin .
 COPY --from=build usr/share/zoneinfo .
-
-COPY .env .
 
 RUN ls -la
 
