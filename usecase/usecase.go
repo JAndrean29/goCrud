@@ -17,7 +17,7 @@ type CrudUsecase interface {
 
 type crudUsecase struct {
 	config   *config.Cfg
-	crudRepo *repository.Queries
+	crudRepo userRepo
 }
 
 // CreateUser implements CrudUsecase.
