@@ -41,7 +41,7 @@ func Test_crudUsecase_CreateUser(t *testing.T) {
 				Gender: pgtype.Text{String: "male", Valid: true},
 			},
 			repoRes: repository.User{ID: 1},
-			want:    repository.User{ID: 1},
+			want:    repository.User{ID: 900},
 		},
 		{
 			name:    "repo fails",
