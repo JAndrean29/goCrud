@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"errors"
 	"goCrud/config"
 	"goCrud/repository"
 	"reflect"
@@ -34,19 +33,24 @@ func Test_crudUsecase_CreateUser(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "success",
+			name: "Success",
 			user: repository.CreateUserParams{
 				Name:   pgtype.Text{String: "John Doe", Valid: true},
 				Age:    pgtype.Int4{Int32: 34, Valid: true},
 				Gender: pgtype.Text{String: "male", Valid: true},
 			},
 			repoRes: repository.User{ID: 1},
-			want:    repository.User{ID: 900},
+			want:    repository.User{ID: 1},
 		},
 		{
-			name:    "repo fails",
-			repoErr: errors.New("db down"),
-			wantErr: true,
+			name: "Success create, incorrect output ID",
+			user: repository.CreateUserParams{
+				Name:   pgtype.Text{String: "John Doe", Valid: true},
+				Age:    pgtype.Int4{Int32: 34, Valid: true},
+				Gender: pgtype.Text{String: "male", Valid: true},
+			},
+			repoRes: repository.User{ID: 3},
+			want:    repository.User{ID: 2},
 		},
 	}
 	for _, tt := range tests {

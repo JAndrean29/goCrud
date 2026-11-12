@@ -1,6 +1,7 @@
 name: CI
 
 on:
+  ##conditions when the CI will be triggered
   push:
     branches: [master]
   pull_request:
@@ -8,6 +9,7 @@ on:
 
 jobs:
   test:
+    ##select the image of the environment
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
