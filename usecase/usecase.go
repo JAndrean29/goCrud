@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"errors"
+	"fmt"
 	"goCrud/config"
 	"goCrud/repository"
 	"strings"
@@ -17,7 +18,7 @@ type CrudUsecase interface {
 
 type crudUsecase struct {
 	config   *config.Cfg
-	crudRepo *repository.Queries
+	crudRepo userRepo
 }
 
 // CreateUser implements CrudUsecase.
@@ -26,7 +27,13 @@ func (c crudUsecase) CreateUser(ctx context.Context, user repository.CreateUserP
 		return repository.User{}, errors.New("invalid input detected")
 	}
 
-	return c.crudRepo.CreateUser(ctx, user)
+	out, err := c.crudRepo.CreateUser(ctx, user)
+	if err != nil {
+		errMsg := fmt.Errorf("error when creating a user: %e", err)
+		return repository.User{}, errMsg
+	}
+
+	return out, nil
 }
 
 // DeleteUser implements CrudUsecase.
