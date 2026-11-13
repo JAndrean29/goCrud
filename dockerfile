@@ -46,9 +46,9 @@ FROM alpine AS running
 
 WORKDIR /app
 
-RUN apk --no-cache add sqlite
+#RUN apk --no-cache add sqlite
 
-COPY users.db .
+#COPY users.db .
 COPY --from=build bin .
 COPY --from=build usr/share/zoneinfo .
 
