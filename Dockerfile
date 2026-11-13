@@ -14,6 +14,9 @@ RUN go mod download
 #copy api_docs
 COPY api_docs ./api_docs
 
+#copy config
+COPY config ./config
+
 #copy di
 COPY di ./di
 
