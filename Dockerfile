@@ -35,9 +35,11 @@ COPY usecase ./usecase
 #copy main.go
 COPY main.go .
 
-ENV CGO_ENABLED=1
+# ENV CGO_ENABLED=1
 
-RUN go build -o /bin/main main.go
+# RUN go build -o /bin/main main.go
+
+RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/main .
 
 RUN ls -la
 
