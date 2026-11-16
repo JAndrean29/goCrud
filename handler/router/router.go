@@ -26,6 +26,7 @@ func Setup(service *di.CrudService) *gin.Engine {
 
 func publicRoutes(r *gin.Engine, service *di.CrudService) {
 	//to be added with PING and HEALTHCHECK ROUTE
+	r.GET("/health", service.CrudHandler.Health)
 }
 
 func privateRouteV1(r *gin.Engine, service *di.CrudService) {

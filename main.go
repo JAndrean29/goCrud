@@ -8,11 +8,24 @@ import (
 	"goCrud/handler/router"
 	"goCrud/infrastructure/postgresql"
 	"log"
+	"net/http"
+	"os"
+	"slices"
+	"time"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
+	if slices.Contains(os.Args[1:], "-healthcheck") {
+		client := http.Client{Timeout: 2 * time.Second}
+		resp, err := client.Get("http://localhost:8080/health")
+		if err != nil || resp.StatusCode != http.StatusOK {
+			os.Exit(1)
+		}
+		os.Exit(0)
+	}
+
 	//load config
 	cfg, err := config.LoadConfig()
 	if err != nil {

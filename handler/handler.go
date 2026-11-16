@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 var createReq repository.CreateUserParams
@@ -76,4 +77,21 @@ func (h *CrudHandler) DeleteUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "user delete success!"})
+}
+
+func (h *CrudHandler) Health(c *gin.Context) {
+
+	db, ok := c.MustGet("db").(*pgxpool.Pool)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"health": "failed to detect db connection"})
+		return
+	}
+
+	err := db.Ping(c.Request.Context())
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"health": "failed to communicate with db"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"health": "ok"})
 }
